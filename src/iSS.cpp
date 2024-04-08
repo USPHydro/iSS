@@ -100,6 +100,20 @@ void iSS::getSurfaceCellFromJETSCAPE(std::vector<FO_surf> &FOsurf_arr) {
     }
 
     afterburner_type_ = freeze_out_data.get_afterburner_type();
+    messager << "Using afterburner type: ";
+    if (afterburner_type_ == AfterburnerType::SMASH) {
+        messager << "SMASH";
+    } else if (afterburner_type_ == AfterburnerType::UrQMD) {
+        messager << "UrQMD";
+    } else if (afterburner_type_ == AfterburnerType::JAM) {
+        messager << "JAM";
+    } else if (afterburner_type_ == AfterburnerType::PDG_Decay) {
+        messager << "PDG_Decay";
+    } else {
+        messager << "<Unknown afterburner type>";
+    }
+    messager << " and flag_PCE = " << flag_PCE_;
+    messager.flush("info");
     freeze_out_data.read_in_chemical_potentials(FOsurf_arr, particle_);
     flag_PCE_ = freeze_out_data.get_flag_PCE();
 
@@ -135,6 +149,21 @@ int iSS::read_in_FO_surface() {
     afterburner_type_ = freeze_out_data.get_afterburner_type();
     freeze_out_data.read_in_chemical_potentials(FOsurf_temp, particle_);
     flag_PCE_ = freeze_out_data.get_flag_PCE();
+
+    messager << "Using afterburner type: ";
+    if (afterburner_type_ == AfterburnerType::SMASH) {
+        messager << "SMASH";
+    } else if (afterburner_type_ == AfterburnerType::UrQMD) {
+        messager << "UrQMD";
+    } else if (afterburner_type_ == AfterburnerType::JAM) {
+        messager << "JAM";
+    } else if (afterburner_type_ == AfterburnerType::PDG_Decay) {
+        messager << "PDG_Decay";
+    } else {
+        messager << "<Unknown afterburner type>";
+    }
+    messager << " and flag_PCE = " << flag_PCE_;
+    messager.flush("info");
 
     computeFOSurfTmunu(FOsurf_temp);
     if (paraRdr_ptr->getVal("MC_sampling") == 4) {

@@ -122,7 +122,7 @@ FSSW::FSSW(std::shared_ptr<RandomUtil::Random> ran_gen,
     number_of_chosen_particles = chosen_particles_in->getNumberOfRows();
     chosen_particles_sampling_table.resize(number_of_chosen_particles, 0);
     std::vector<int> unidentifiedPid_table;
-    // first copy the chosen_particles table, but now using indecies 
+    // first copy the chosen_particles table, but now using indecies
     // instead of monval
     int current_idx = 0;
     for (int m = 0; m < number_of_chosen_particles; m++) {

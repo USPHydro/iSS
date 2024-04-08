@@ -41,6 +41,10 @@ int particle_decay::read_resonances_list() {
     } else {
         reso_filename = table_path_ + "/pdg-s95pv1.dat";
     }
+    pretty_ostream messager;
+    messager << " -- Read in particle resonance decay table from: "
+             << reso_filename;
+    messager.flush("info");
     std::ifstream resofile(reso_filename.c_str());
     if (!resofile.good()) {
         cout << "[Error] Can not found pdg file: " << reso_filename << endl;
@@ -265,11 +269,20 @@ int particle_decay::get_particle_strange_number(int monval) {
 void particle_decay::perform_decays(
             iSS_Hadron *mother, vector<iSS_Hadron>* daughter_list) {
     particle_info* mother_decay_info = NULL;
+    bool found_mother = false;
     for (unsigned int i = 0; i < resonance_table.size(); i++) {
         if (mother->pid == resonance_table[i]->monval) {
+            found_mother = true;
             mother_decay_info = resonance_table[i];
             break;
         }
+    }
+    if (!found_mother) {
+        cout << "[Error]:particle_decay::perform_decays(): "
+             << "Can not find mother particle with monval = " << mother->pid
+             << endl;
+             daughter_list->push_back(*mother);
+        return;
     }
     if (mother_decay_info->stable == 1) {
         // the particle is a stable particle
@@ -355,10 +368,9 @@ void particle_decay::perform_two_body_decay(iSS_Hadron *mother,
     double m2 = daughter2->mass;
     double M_min = m1 + m2;
     if (M_pole < M_min) {
-        cout << "Error:particleSamples::perform_two_body_decay:"
-             << "can not found decays!" << endl;
+        cout << "Warning: particleSamples::perform_two_body_decay:"
+             << "Mother mass smaller than sum of daughters" << endl;
         cout << "M = " << M_pole << ", m1 = " << m1 << ", m2 = " << m2 << endl;
-        exit(1);
     }
     //double M_sampled = sample_breit_wigner(M_pole, M_width, M_min);
     double M_sampled = M_pole;

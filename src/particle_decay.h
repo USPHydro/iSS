@@ -8,6 +8,7 @@
 
 #include "data_struct.h"
 #include "Random.h"
+#include "pretty_ostream.h"
 
 class particle_decay {
  private:
